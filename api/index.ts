@@ -25,12 +25,13 @@ app.get("/", (req, res) => {
 app.post("/update", (req, res) => {
 	const body = req.body;
 
-	if (!body.version || !body.min) {
+	if (!body.version || !body.min ) {
 		res.status.send(404);
 	}
 	let newVersion = {
 		version: body.version,
 		minimumVersion: body.min,
+		breaking: body.breaking ? body.breaking : false,
 	};
 
 	fs.writeFile(

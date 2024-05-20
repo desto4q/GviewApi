@@ -6,7 +6,7 @@
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
-		"outDir": "./dist"
+		"outDir": "./public"
 	},
 	"include": ["api/**/*.ts", "api/index.cjs", "api/index.js"],
 	"exclude": ["node_modules"]

@@ -1,55 +1,43 @@
 const express = require("express");
 const app = express();
-const fs = require("fs");
 const path = require("path");
 
 const PORT = 8080;
-const filepath = path.join(__dirname, "../version.json");
 app.use(express.json());
 
+let versionData = {
+    version: "2",
+    minimumVersion: "1.0",
+    breaking: false,
+};
+
 app.listen(PORT, () => {
-	console.log("Server started on port", PORT);
+    console.log("Server started on port", PORT);
 });
 
 app.get("/", (req, res) => {
-	fs.readFile(filepath, "utf-8", (err, data) => {
-		if (err) {
-			res.status(500).send("Error reading file");
-			return;
-		}
-		res.send(data);
-	});
-	2;
+    res.send(versionData);
 });
 
 app.post("/update", (req, res) => {
-	const body = req.body;
+    const body = req.body;
 
-	if (!body.version || !body.min ) {
-		res.status.send(404);
-	}
-	let newVersion = {
-		version: body.version,
-		minimumVersion: body.min,
-		breaking: body.breaking ? body.breaking : false,
-	};
+    if (!body.version || !body.min) {
+        res.status(400).send("Missing version or min in request body");
+        return;
+    }
 
-	fs.writeFile(
-		filepath,
-		JSON.stringify(newVersion, null, 2),
-		"utf-8",
-		(err) => {
-			if (err) {
-				res.status(500).send("Error writing file");
-				return;
-			}
-			res.status(200).send(newVersion);
-		}
-	);
+    versionData = {
+        version: body.version,
+        minimumVersion: body.min,
+        breaking: body.breaking ? body.breaking : false,
+    };
+
+    res.status(200).send(versionData);
 });
 
 app.get("/version", (req, res) => {
-	res.status(200).send({
-		version: "2",
-	});
+    res.status(200).send({
+        version: "2",
+    });
 });
